@@ -26,7 +26,7 @@ if (isset($_POST['s']) && $_POST['s'] == 1) {
             if ($sql->execute()) {
                 $_SESSION['msg'] = success("New Product Succesfully Created");
                 unset($_POST);
-                header("location:./index.php");
+                header("location:./viewProducts.php");
             } else {
                 echo error("Unknown Error Occured :(");
             }
@@ -123,13 +123,13 @@ if (isset($_POST['s']) && $_POST['s'] == 1) {
                         </div>
                         <div class="col-12">
                             <div class="md-form">
-                                <input value="<?php echo isset($_POST['products'][5]) ? $_POST['products'][5] : "" ?>" required type="number" class="form-control" name="products[]">
-                                <label for="UPrice">UPrice</label>
+                                <input value="<?php echo isset($_POST['products'][5]) ? $_POST['products'][5] : "" ?>" step="any" required type="number" class="form-control" name="products[]">
+                                <label for="UPrice">UPrice($)</label>
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="md-form">
-                                <input value="<?php echo isset($_POST['products'][6]) ? $_POST['products'][6] : "" ?>" required type="number" class="form-control" name="products[]">
+                                <input value="<?php echo isset($_POST['products'][6]) ? $_POST['products'][6] : "" ?>" step="any" required type="number" class="form-control" name="products[]">
                                 <label for="percentMargin">%Margin</label>
                             </div>
                         </div>

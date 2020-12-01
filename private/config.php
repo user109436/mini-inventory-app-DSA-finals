@@ -45,9 +45,38 @@ function deleteById($table, $id)
     $q = "DELETE FROM " . $table . " WHERE id=" . $id;
     if ($sql = $conn->prepare($q)) {
         $sql->execute();
-        return $result = $sql->get_result();
+        if (validateParamID($id)) {
+            if ($sql->affected_rows > 0) {
+                echo success("Successfully Deleted");
+                return true;
+            } else {
+                echo error("ID does not exist", $id);
+                return false;
+            }
+        } else if (!validateParamID($id)) {
+            echo error("Invalid ID for deletion", $id);
+            return false;
+        }
     } else {
         echo warning($q) . "<br>" . error();
         return false;
     }
+}
+function isPrep($sql)
+{
+    global $conn;
+    if ($sql = $conn->prepare($sql)) {
+        return $sql;
+    }
+    echo error();
+    return false;
+}
+function isExecute($sql)
+{
+    global $conn;
+    if ($sql->execute()) {
+        return true;
+    }
+    echo error("Sorry Failed to Query :<");
+    return false;
 }

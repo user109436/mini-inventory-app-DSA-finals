@@ -26,12 +26,12 @@ percentMargin DOUBLE(11, 2) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS newstocks (
-id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id INT(11) NOT NULL PRIMARY KEY,
 qty INT(11) NOT NULL,
 UPrice DOUBLE(11, 2) NOT NULL
 );
 CREATE TABLE IF NOT EXISTS sales (
-id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id INT(11) NOT NULL PRIMARY KEY,
 qtyOnHand INT(11) NOT NULL, -- products.qtyOnHand + newstocks.qty
 listPrice DOUBLE(11, 2) NOT NULL -- products.UPrice + products.percentMargin + 12%VAT
 );
@@ -45,7 +45,6 @@ listPrice DOUBLE(11, 2) NOT NULL -- products.UPrice + products.percentMargin + 1
 
 
 -- Insert Data____________________
-
 INSERT INTO suppliers (name) 
 VALUES ("ABC"), ("XYZ"),("PQR");
 
@@ -61,13 +60,19 @@ VALUES
     ("Apple",1,1,1, 80,150,15),
     ("Hale",1,2,1, 30,95,9);
 
-INSERT INTO newstocks(qty, UPrice)
-VALUES  (10, 98.95), (20,98.75), (15,101.50), (20,150.10);
+INSERT INTO newstocks(id, qty, UPrice)
+VALUES  (1,10, 98.95), (2,20,98.75), (3,15,101.50), (4,20,150.10);
+
+INSERT INTO sales (id,qtyOnHand, listPrice)
+VALUES (1, 10, 110.109),(2, 15,110.109), (3,20,110.109);
 
 
 -- Need to insert the list price + 12%VAT inlcuded
-INSERT INTO orders (id,userID, qty)
-VALUES (1, 1, 10),(2, 1, 15), (3, 1,20);
+INSERT INTO orders (id,userID, qty, listPrice)
+VALUES (1, 1, 10, 110.109),(2, 2, 15,110.109), (3, 3,20,110.109);
+
+
+
 
 
         

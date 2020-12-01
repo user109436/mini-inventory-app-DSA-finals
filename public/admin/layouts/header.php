@@ -19,5 +19,18 @@ session_start();
   <!-- Your custom styles (optional) -->
   <link href="../node_modules/mdbootstrap/css/style.css" rel="stylesheet">
 
+  <!-- <script type="text.javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script type="text.javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.4/js/dataTables.buttons.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.print.min.js"></script> -->
+
+  <script type="text/javascript">
+    function del(loc, id) {
+      let x = confirm(`Delete ID: ${id}?`);
+      if (x) {
+        window.location = `${loc}${id}`;
+      }
+    }
+  </script>
 </head>
 <?php include("navbar.php") ?>

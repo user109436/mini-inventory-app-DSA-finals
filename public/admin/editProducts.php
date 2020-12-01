@@ -170,13 +170,13 @@ if (validateParamID('productID')) {
                                 </div>
                                 <div class="col-12">
                                     <div class="md-form">
-                                        <input value="<?php echo $UPrice ?>" required type="number" class="form-control" name="products[]">
-                                        <label for="UPrice">UPrice</label>
+                                        <input value="<?php echo $UPrice ?>" required type="number" step="0.001" class="form-control" name="products[]">
+                                        <label for="UPrice">UPrice($)</label>
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="md-form">
-                                        <input value="<?php echo $percentMargin ?>" required type="number" class="form-control" name="products[]">
+                                        <input value="<?php echo $percentMargin ?>" required type="number" step="0.001" class="form-control" name="products[]">
                                         <label for="percentMargin">%Margin</label>
                                     </div>
                                 </div>
