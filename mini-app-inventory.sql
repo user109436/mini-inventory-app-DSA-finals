@@ -1,10 +1,7 @@
-/*NOTE
+-- NOTE add the 12%VAT in the list-price Unit Price is in Dollars
 
-add the 12%VAT in the list-price
-Unit Price is in Dollars
-*/
 
-CREATE DATABASE IF NOT EXISTS mini-app-inventory;
+CREATE DATABASE IF NOT EXISTS miniAppInventory;
 
 CREATE TABLE IF NOT EXISTS suppliers(
 id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -35,20 +32,19 @@ UPrice DOUBLE(11, 2) NOT NULL
 );
 CREATE TABLE IF NOT EXISTS sales (
 id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-qtyOnHand INT(11) NOT NULL, /* products.qtyOnHand + newstocks.qty*/
-listPrice DOUBLE(11, 2) NOT NULL /*products.UPrice + products.percentMargin + 12%VAT*/
+qtyOnHand INT(11) NOT NULL, -- products.qtyOnHand + newstocks.qty
+listPrice DOUBLE(11, 2) NOT NULL -- products.UPrice + products.percentMargin + 12%VAT
 );
 
 CREATE TABLE IF NOT EXISTS orders (
-id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id INT(11) NOT NULL PRIMARY KEY,
 userID INT(11) NOT NULL,
-productID INT(11) NOT NULL,
 qty INT(11) NOT NULL,
-listPrice DOUBLE(11, 2) NOT NULL /*products.UPrice + products.percentMargin + 12%VAT*/
+listPrice DOUBLE(11, 2) NOT NULL -- products.UPrice + products.percentMargin + 12%VAT
 ); 
 
 
-/*Insert Data____________________*/
+-- Insert Data____________________
 
 INSERT INTO suppliers (name) 
 VALUES ("ABC"), ("XYZ"),("PQR");
@@ -69,9 +65,9 @@ INSERT INTO newstocks(qty, UPrice)
 VALUES  (10, 98.95), (20,98.75), (15,101.50), (20,150.10);
 
 
-/*Need to insert the list price + 12%VAT inlcuded*/
-INSERT INTO orders (userID, productID, qty)
-VALUES (1, 1, 10),(1, 1, 15), (1, 1,20);
+-- Need to insert the list price + 12%VAT inlcuded
+INSERT INTO orders (id,userID, qty)
+VALUES (1, 1, 10),(2, 1, 15), (3, 1,20);
 
 
         
