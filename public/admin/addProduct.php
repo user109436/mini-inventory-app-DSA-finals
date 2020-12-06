@@ -2,39 +2,20 @@
 include("./layouts/header.php");
 
 
-#TODO responsive category and supplier id overlaps in responsive view
+//check if categories and suppliers is existing
+//check if  forsale is yes or no 
+
 
 if (isset($_POST['s']) && $_POST['s'] == 1) {
-    $productInfo = [];
-    $errors = 0;
-
-    //check for empty fields
-    foreach ($_POST['products'] as $product) {
-        if (empty($product)) {
-            $errors++;
-        }
-    }
-    if ($errors == 0) {
-        //sanitize values
-        foreach ($_POST['products'] as $product) {
-            $product = htmlentities(htmlspecialchars($conn->real_escape_string($product)));
-            $productInfo[] = filter_var($product, FILTER_SANITIZE_STRING);
-        }
-
-        if ($sql = $conn->prepare("INSERT INTO products (name, catID, supID, forsale, qtyOnHand, UPrice, percentMargin)VALUES(?,?,?,?,?,?,?)")) {
+    $productInfo = sanitizeInput($_POST['products']); //sanitize values
+    if (noEmptyField($_POST['products'])) {
+        if ($sql = isPrep("INSERT INTO products (name, catID, supID, forsale, qtyOnHand, UPrice, percentMargin)VALUES(?,?,?,?,?,?,?)")) {
             $sql->bind_param("sssssss", $productInfo[0], $productInfo[1], $productInfo[2], $productInfo[3], $productInfo[4], $productInfo[5], $productInfo[6]);
-            if ($sql->execute()) {
-                $_SESSION['msg'] = success("New Product Succesfully Created");
-                unset($_POST);
-                header("location:./viewProducts.php");
-            } else {
-                echo error("Unknown Error Occured :(");
+            if (isExecute($sql)) {
+                createEditProduct($conn->insert_id, $productInfo);
+                logProduct($productInfo, $_SESSION['id'], 1);
             }
-        } else {
-            echo error();
         }
-    } else {
-        echo error("Error(s)! Please Fill up the required fields", $errors);
     }
 }
 ?>
@@ -59,15 +40,15 @@ if (isset($_POST['s']) && $_POST['s'] == 1) {
                     <div class="col-12">
                         <!-- First name -->
                         <div class="md-form">
-                            <input value="<?php echo isset($_POST['products'][0]) ? $_POST['products'][0] : "" ?>" required type="text" id="productName" class="form-control" name="products[]">
+                            <input value="<?php echo $_POST['products'][0] ?? "" ?>" required type="text" id="productName" class="form-control" name="products[0]">
                             <label for="productName">Name</label>
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="md-form">
-                            <select class=" p-2 col-6" name="products[]" required>
+                            <select class=" p-2 col-6" name="products[1]" required>
                                 <?php
-                                if ($result = getAll("categories")) {
+                                if ($result = getAllFetch("categories")) {
                                     if ($result->num_rows > 0) {
                                         echo '<option value="" disabled selected>Choose Category</option>';
                                         while ($row = $result->fetch_assoc()) {
@@ -85,10 +66,11 @@ if (isset($_POST['s']) && $_POST['s'] == 1) {
                     </div>
                     <div class="col-12">
                         <div class="md-form">
-                            <select class=" p-2 col-6" name="products[]" required>
+                            <select class=" p-2 col-6" name="products[2]" required>
                                 <?php
-                                if ($result = getAll("suppliers")) {
+                                if ($result = getAllFetch("suppliers")) {
                                     if ($result->num_rows >  0) {
+
                                         echo '<option value="" disabled selected>Choose Supplier</option>';
                                         while ($row = $result->fetch_assoc()) {
                                             echo "<option value=" . $row['id'] . ">" . $row['name'] . "</option>";
@@ -107,29 +89,29 @@ if (isset($_POST['s']) && $_POST['s'] == 1) {
                         <div class="col-3">
                             <label for="forSale">For Sale:</label>
                             <div class="custom-control custom-radio offset-1">
-                                <input value="1" required type="radio" class="custom-control-input " id="yes" name="products[]" checked>
+                                <input value="1" required type="radio" class="custom-control-input " id="yes" name="products[3]" checked>
                                 <label class="custom-control-label" for="yes">Yes</label>
                             </div>
                             <div class="custom-control custom-radio  offset-1">
-                                <input value="0" required type="radio" class="custom-control-input " id="no" name="products[]">
+                                <input value="0" required type="radio" class="custom-control-input " id="no" name="products[3]">
                                 <label class="custom-control-label" for="no">No</label>
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="md-form">
-                                <input value="<?php echo isset($_POST['products'][4]) ? $_POST['products'][4] : "" ?>" required type="number" class="form-control" name="products[]">
+                                <input value="<?php echo $_POST['products'][4] ?? "" ?>" required step="1" type="number" class="form-control" name="products[4]">
                                 <label for="qtyOnHand">Quantity on Hand</label>
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="md-form">
-                                <input value="<?php echo isset($_POST['products'][5]) ? $_POST['products'][5] : "" ?>" step="any" required type="number" class="form-control" name="products[]">
+                                <input value="<?php echo $_POST['products'][5] ?? "" ?>" step="any" required type="number" class="form-control" name="products[5]">
                                 <label for="UPrice">UPrice($)</label>
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="md-form">
-                                <input value="<?php echo isset($_POST['products'][6]) ? $_POST['products'][6] : "" ?>" step="any" required type="number" class="form-control" name="products[]">
+                                <input value="<?php echo $_POST['products'][6] ?? "" ?>" step="any" required type="number" class="form-control" name="products[6]">
                                 <label for="percentMargin">%Margin</label>
                             </div>
                         </div>

@@ -1,97 +1,82 @@
 <?php
 include("./layouts/header.php");
 
+// $resultSales = isPrep("UPDATE sales, orders SET sales.listPrice=?, orders.listPrice=? WHERE sales.id=? AND orders.id=?");
+// $resultSales->bind_param("ssss", $a, $a, $id, $id);
+// $resultSales->execute();
+// echo "Update Sales and Orders Affected Rows:" . $resultSales->affected_rows;
+// // --products . UPrice + products . percentMargin + 12 % VAT
 
-#TODO responsive category and supplier id overlaps in responsive view
-if (isset($_SESSION['msg']) && !empty($_SESSION['msg'])) {
-    echo $_SESSION['msg'];
-    unset($_SESSION['msg']);
-}
-$id = 1;
-//Existing Stock Addedd Price decrease
-$UPriceStock = 98.95;
-$s = isPrep("UPDATE products SET UPrice=? WHERE id=?");
-$s->bind_param("ss", $UPriceStock, $id);
-$s->execute();
-echo "Products Affected Rows:" . $s->affected_rows . "<br>";
-
-
-
-//update price in sales and products
-
-$resultProducts = getById('products', $id);
-echo "Product Num rows: " . $resultProducts->num_rows . "<br>";
-$rowProducts = $resultProducts->fetch_assoc();
-// $x = $rowProducts['UPrice'];
-$x = $UPriceStock;
-$y = $rowProducts['percentMargin'];
-// --products . UPrice + products . percentMargin + 12 % VAT
-echo "Product.UPrice: " . $x . "<br>";
-echo "Product.%margin: " . $y . "<br>";
-
-$z = $x + ($x * ($y / 100));
-$a = $z + ($z * .12);
-$a = round($a, 2);
-// echo "UPrice+%margin: " . $z . "<br>";
-// echo "UPrice+%margin+12%VAT: " . $a . "<br>";
-
-//update listprice of sales and orders
-
-// UPDATE sales, orders SET sales.listPrice=15, orders.listPrice=15 WHERE sales.id=1 and orders.id =1
-
-$resultSales = isPrep("UPDATE sales, orders SET sales.listPrice=?, orders.listPrice=? WHERE sales.id=? AND orders.id=?");
-$resultSales->bind_param("ssss", $a, $a, $id, $id);
-$resultSales->execute();
-echo "Update Sales and Orders Affected Rows:" . $resultSales->affected_rows;
-
-// --products . UPrice + products . percentMargin + 12 % VAT
-
-die();
+// die();
 
 if (isset($_POST['s']) && $_POST['s'] == 1) {
-    $productInfo = [];
     printArr($_POST);
 
     if (noEmptyField($_POST['products'])) {
-        $productInfo = sanitizeInput($_POST['products']);
 
-        //update if there's a stock
 
-        $result = getById('newstocks', $productInfo[0]);
-        if ($result->num_rows > 0) { //if there's a stock update
-            if ($sql = isPrep("UPDATE newstocks SET qty=?, UPrice=? WHERE id=?")) {
-                $sql->bind_param("ssi", $productInfo[1], $productInfo[2], $productInfo[0]);
-                if (isExecute($sql)) {
-                    $_SESSION['msg'] = success("Stock Succesfully Updated");
-                    unset($_POST);
-                    header("location:./viewStocks.php");
+        if (noEmptyField($_POST['products'])) {
+            $productInfo = sanitizeInput($_POST['products']);
+            /*
+                0-product id
+                1-qty
+                2-UPrice
+             */
+            if ($sql = getById(
+                'products',
+                $productInfo[0],
+                1,
+                "Cannot Add Stocks To Non-Existing Product"
+            )) {
+
+                $msg = null;
+                //insert into new stocks for logging purposes
+                if ($newstock = isPrep("INSERT INTO newstocks (id, qty, UPrice, accountID) VALUES (?,?,?,?)")) {
+                    $newstock->bind_param("ssss", $productInfo[0], $productInfo[1], $productInfo[2], $_SESSION['accountID']);
+                    if (isExecute($newstock)) {
+                        $msg .= "Record Saved to Logs ";
+                    }
                 }
-            }
-        } else {
-            //          insert if there's no New stock
-            if ($sql = isPrep("INSERT INTO newstocks (id,qty, UPrice)VALUES(?,?,?)")) {
-                $sql->bind_param("sss", $productInfo[0], $productInfo[1], $productInfo[2]);
-                if (isExecute($sql)) {
-                    $_SESSION['msg'] = success("New Stock Succesfully Created");
-                    unset($_POST);
-                    header("location:./viewStocks.php");
+
+                $row = $sql->fetch_assoc();
+                $percentMargin = $row['percentMargin'] / 100;
+                $qty = $row['qtyOnHand'];
+                $listPrice = $productInfo[2] + ($productInfo[2] * $percentMargin);
+                $listPrice += $listPrice * .12;
+                $listPrice = round($listPrice, 2);
+                $qty += $productInfo[1];
+
+                //update products
+                $msg .= "Changes, ";
+                if ($sql = isPrep("UPDATE products SET qtyOnHand=?, UPrice=? WHERE id=?")) {
+                    $sql->bind_param("sss", $qty, $productInfo[2], $productInfo[0]);
+                    if (isExecute($sql)) {
+                        $msg .= $sql->affected_rows . "  in Products, ";
+                        //insert the updated prouducts
+                        if ($sql = getById('products', $productInfo[0])) {
+                            logProduct($sql->fetch_all()[0], $_SESSION['accountID'], 2);
+                        }
+                    }
                 }
+                //update sales
+                if ($sql = isPrep("UPDATE sales SET qty=?, listPrice=? WHERE id=?")) {
+                    $sql->bind_param("sss", $qty, $listPrice, $productInfo[0]);
+                    if (isExecute($sql)) {
+                        $msg .= $sql->affected_rows . " in Sales, ";
+                    }
+                }
+                //update orders
+                if ($sql = isPrep("UPDATE orders SET listPrice=? WHERE id=?")) {
+                    $sql->bind_param("ss", $listPrice, $productInfo[0]);
+                    if (isExecute($sql)) {
+                        $msg .= $sql->affected_rows . " in Orders ";
+                    }
+                }
+                $_SESSION['msg'] = success($msg);
+                header("location:viewProducts.php");
             }
         }
-
-        // //update price in sales and products
-        // $resultSales = getById('sales', 1);
-        // echo "Sales Num rows: " . $resultSales->num_rows;
-
-        // $resultProducts = getById('products', 1);
-        // echo "Product Num rows: " . $resultSProducts->num_rows;
-
-        //
-
     }
-
-    //insert data to newstocks then update the price of products and sales
-
 }
 ?>
 
@@ -116,12 +101,11 @@ if (isset($_POST['s']) && $_POST['s'] == 1) {
                         <div class="md-form">
                             <select class=" p-2 col-6" name="products[]" require="true">
                                 <?php
-                                if ($result = getAll("products")) {
+                                if ($result = getAllFetch("products")) {
                                     if ($result->num_rows > 0) {
                                         echo '<option value="" disabled selected>Choose Products</option>';
                                         while ($row = $result->fetch_assoc()) {
                                             echo "<option value=" . $row['id'] . ">" . $row['name'] . "</option>";
-                                            $items[] = json_encode($row);
                                         }
                                     } else {
                                         echo '<option value="" disabled selected>Please Add First a Product</option>';

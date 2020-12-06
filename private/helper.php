@@ -19,21 +19,21 @@ function success($msg = "Success")
 }
 function validateParamID($param = "")
 {
-    if (filter_var($_GET[$param], FILTER_VALIDATE_INT)) {
+    if (isset($_GET[$param]) && filter_var($_GET[$param], FILTER_VALIDATE_INT)) {
         return true;
     }
     return false;
 }
-
 function noEmptyField($fields, $msg = "Error(s)! Please Fill up the required field(s)")
 {
     $errors = 0;
     foreach ($fields as $field) {
-        if (empty($field)) {
+        if ($field == null) {
             $errors++;
         }
     }
     if ($errors > 0) {
+        // printArr($fields);
         echo error($msg, $errors);
         return false;
     }
@@ -49,12 +49,9 @@ function sanitizeInput($fields)
     return $fieldInfo;
 }
 
-// function message($msg)
-// {
-//     if (!empty($msg)) {
-//         echo $msg;
-//         unset($msg);
-//         return true;
-//     }
-//     return false;
-// }
+function sanitizeSingle($sanitize)
+{
+    global $conn;
+    $sanitize = htmlentities(htmlspecialchars($conn->real_escape_string($sanitize)));
+    return $sanitize = filter_var($sanitize, FILTER_SANITIZE_STRING);
+}

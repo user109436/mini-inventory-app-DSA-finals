@@ -1,43 +1,40 @@
 <?php
 include("db.php");
 include("helper.php");
+include("functions.php");
+
 
 function openQuery($q) //for one time execute only without binding of data
 {
     global $conn;
-    if ($sql = $conn->prepare($q)) {
-        $sql->execute();
-        return $result = $sql->get_result();
-    } else {
-        echo warning($q) . "<br>" . error();
-        return false;
+    if ($sql = isPrep($q)) {
+        if (isExecute($sql)) {
+            return $sql->get_result();
+        }
     }
 }
-function getAll($table)
+function getById($table, $id, $warning = 1, $msg = "0 Results")
+{
+    global $conn;
+    if ($sql = isPrep("SELECT * FROM " . $table . " WHERE id=? LIMIT 1")) {
+        $sql->bind_param("s", $id);
+        if (isExecute($sql)) {
+            return hasRows($sql->get_result(), $warning, $msg);
+        }
+    }
+}
+function getAllFetch($table, $warning = 1, $msg = "0 Result")
 {
     global $conn;
     $q = "SELECT * FROM " . $table;
-    if ($sql = $conn->prepare($q)) {
-        $sql->execute();
-        return $result = $sql->get_result();
-    } else {
-        echo warning($q) . "<br>" . error();
-        return false;
-    }
-}
-function getById($table, $id)
-{
-    global $conn;
-    $q = "SELECT * FROM " . $table . " WHERE id=" . $id . " LIMIT 1";
-    if ($sql = $conn->prepare($q)) {
-        $sql->execute();
-        return $result = $sql->get_result();
-    } else {
-        echo warning($q) . "<br>" . error();
-        return false;
+    if ($sql = isPrep($q)) {
+        if (isExecute($sql)) {
+            return hasRows($sql->get_result(), $warning, $msg);
+        }
     }
 }
 
+//delete
 function deleteById($table, $id)
 {
     global $conn;
@@ -62,21 +59,55 @@ function deleteById($table, $id)
         return false;
     }
 }
-function isPrep($sql)
+function deleteItem($table, $param, $location)
 {
-    global $conn;
-    if ($sql = $conn->prepare($sql)) {
-        return $sql;
+    if (isset($_GET[$param]) && validateParamID($param)) {
+        deleteById($table, $_GET[$param]);
+        header("location:" . $location);
+        return true;
     }
-    echo error();
     return false;
 }
-function isExecute($sql)
+function delete($table, $id)
+{
+    if ($sql = isPrep("DELETE FROM " . $table . " WHERE id=?")) {
+        $sql->bind_param("s", $id);
+        if (isExecute($sql)) {
+            return $sql->affected_rows;
+        }
+    }
+}
+
+
+//prepared statements
+function isPrep($q)
+{
+    // echo warning($q);
+    global $conn;
+    if ($sql = $conn->prepare($q)) {
+        return $sql;
+    }
+    echo warning($q) . "<br>" . error();
+    return false;
+}
+function isExecute($sql, $msg = "Sorry Failed to Execute Query :<")
 {
     global $conn;
     if ($sql->execute()) {
         return true;
     }
-    echo error("Sorry Failed to Query :<");
+    printArr($sql);
+    echo error($msg);
+    return false;
+}
+//additional tool for checking
+function hasRows($result, $warning = 1, $msg = "")
+{
+    global $conn;
+    if ($result->num_rows > 0) {
+        return $result;
+    }
+
+    echo $warning ? warning($msg) : "";
     return false;
 }

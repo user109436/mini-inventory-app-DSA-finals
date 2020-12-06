@@ -1,4 +1,4 @@
-<!--Navbar-->
+<!-- Navbar-->
 <nav class="navbar navbar-expand-lg navbar-dark primary-color">
 
   <!-- Navbar brand -->
@@ -25,6 +25,18 @@
       <li class="nav-item">
         <a class="nav-link" href="./viewStocks.php">New Stocks</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="./viewSuppliers.php">Suppliers</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="./viewCategories.php">Categories</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="./viewOrders.php">Orders</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="./viewSales.php">Sales</a>
+      </li>
 
 
     </ul>
@@ -33,4 +45,4 @@
   <!-- Collapsible content -->
 
 </nav>
-<!--/.Navbar-->
+<!--/.Navbar -->

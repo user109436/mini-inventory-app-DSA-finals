@@ -1,5 +1,10 @@
-<?php include("../../private/config.php");
+<?php
+include("../../private/config.php");
 session_start();
+
+$_SESSION['accountType'] = 4;
+$_SESSION['accountID'] = 4;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,4 +38,7 @@ session_start();
     }
   </script>
 </head>
-<?php include("navbar.php") ?>
+<?php
+include("navbar.php");
+include("./tools/message.php");
+?>
