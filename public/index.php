@@ -1,5 +1,10 @@
 <?php
 include("./layouts/header.php");
+if (isset($_SESSION['accountID']) and isset($_SESSION['accountType']) and $_SESSION['accountType']  == 1) {
+  header("location:home.php");
+} else if (isset($_SESSION['accountID']) and isset($_SESSION['accountType']) and $_SESSION['accountType']  >= 2) {
+  header("location:admin");
+}
 
 if (isset($_POST['s']) && $_POST['s'] == 1) {
   $username = $conn->real_escape_string($_POST['username']);
@@ -34,9 +39,6 @@ if (isset($_POST['s']) && $_POST['s'] == 1) {
               $_SESSION['x'] = warning("Wrong Credentials");
             }
           }
-        } else {
-          //Account doesn't exist
-          echo error("Account Doesn't Exist");
         }
       } else {
         //error
@@ -53,12 +55,6 @@ if (isset($_POST['s']) && $_POST['s'] == 1) {
 ?>
 
 <body>
-
-
-  <?php
-
-  include("./layouts/navbar.php");
-  ?>
   <!-- Full Page Intro -->
   <div class="view full-page-intro" style="height:100vh; background-image: url( node_modules/mdbootstrap/img/inventory.svg); background-repeat: no-repeat; background-size: cover;">
 
@@ -78,13 +74,9 @@ if (isset($_POST['s']) && $_POST['s'] == 1) {
 
             <hr class="hr-light">
 
-            <p>
+            <h2>
               <strong>We Keep Things Tracked</strong>
-            </p>
-
-            <p class="mb-4 d-none d-md-block">
-              <strong>Taste the world's most delicious italian food ever serve, with over 50 branches worldwide and 67 years expertise in cooking</strong>
-            </p>
+            </h2>
 
             <a href="register.php" class="btn btn-success btn-lg animated pulse infinite">Sign up
               <i class="fas fa-sign-in-alt ml-2"></i>
@@ -128,6 +120,7 @@ if (isset($_POST['s']) && $_POST['s'] == 1) {
                     <p class="ml-3 p-2">
                       <input type="checkbox" onclick="showPwd()">
                       Show password
+                      <a href="recover.php">Forgot Password?</a>
                     </p>
 
                   </div>

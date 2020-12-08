@@ -2,7 +2,7 @@
 include_once("./../private/config.php");
 session_start();
 printArr($_SESSION);
-
+ob_start();
 ?>
 
 <!DOCTYPE html>
@@ -12,7 +12,7 @@ printArr($_SESSION);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>ITALICIOUS</title>
+  <title>INVETOTRACK</title>
   <!-- MDB icon -->
   <link rel="icon" href="./../node_modules/mdbootstrap/img/italicious.ico" type="image/x-icon">
   <!-- Font Awesome -->

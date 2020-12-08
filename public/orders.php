@@ -1,5 +1,8 @@
 <?php
 include("./layouts/header.php");
+if (!isset($_SESSION['accountID']) or !isset($_SESSION['accountType'])) {
+    header("location:./");
+}
 if (isset($_GET['cancel']) and !empty($_GET['cancel'])) {
     $dateOrder = $_GET['cancel'];
     $dateOrder = str_replace("%20", " ", $dateOrder);
