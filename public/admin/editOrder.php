@@ -1,77 +1,97 @@
 <?php
 include("./layouts/header.php");
+pageRestrict();
 
-#TODO responsive category and suppliers id overlaps in responsive view
-
-$_SESSION['id'];
+// $_SESSION['date'];
 if (isset($_POST['s']) && $_POST['s'] == 1) {
-
+    $date = strip_tags($_POST['orderState'][1]);
+    $orderState = sanitizeInput($_POST['orderState']);
     if (noEmptyField($_POST['orderState'])) {
 
-        $orderState = sanitizeInput($_POST['orderState']);
-        $orderState = (int)$orderState[0];
-        if ($orderState <= 4 && $orderState >= 1) {
-            //make changes
-            if ($sql = isPrep("UPDATE orders SET state=?, accountID=? WHERE id=?")) {
-                $sql->bind_param("sss", $orderState, $_SESSION['accountID'], $_SESSION['id']);
+        $orderState[0] = (int)$orderState[0];
+        $orderState[1] = (int)$orderState[1];
+        if ($orderState[0] <= 4 && $orderState[0] >= 1) {
+
+            //return qty to sales and products if cancelled
+            $msg = $orderState[0] == 4 ? returnQtySaleProd($date) : "";
+
+            //make changes to orders
+            if ($sql = isPrep("UPDATE orders SET state=?, accountID=? WHERE date=?")) {
+                $sql->bind_param("sss", $orderState[0], $_SESSION['accountID'], $date);
                 if (isExecute($sql)) {
-                    $_SESSION['msg'] = success("Order ID: " . $_SESSION['id'] . " Successfully Updated");
+                    $_SESSION['msg'] = success("Date Order: " . $date . " Successfully Updated" . $msg);
                     header("location:viewOrders.php");
                 }
             }
         } else {
-            echo $error("Please Select Only on the Given Order State");
+            echo error("Please Select Only on the Given Order State");
         }
     }
 }
-if (validateParamID('orderID')) {
-    $_SESSION['id'] = (int)$_GET['orderID'];
+if (isset($_GET['orderID']) and !empty($_GET['orderID'])) {
+    $date = $_GET['orderID'];
+
+    if ($orderState = isPrep("SELECT * from orders WHERE date=?")) {
+        $orderState->bind_param("s", $date);
+        if (isExecute($orderState)) {
+            $result = $orderState->get_result();
+            $currentState = $result->fetch_assoc()['state'];
+        }
+    }
+
+    if ($currentState == 3 || $currentState == 2) { // allow edit only if processing and to review
+
 ?>
 
 
-    <div class="container mt-5">
-        <!-- Material form register -->
-        <div class="row">
-        </div>
-        <div class=" card">
+        <div class="container mt-5">
+            <!-- Material form register -->
+            <div class="row">
+            </div>
+            <div class=" card">
 
-            <h5 class="card-header info-color white-text text-center py-4">
-                <strong>Edit Order State</strong>
-            </h5>
+                <h5 class="card-header info-color white-text text-center py-4">
+                    <strong>Edit Order State</strong>
+                </h5>
 
-            <!--Card content-->
-            <div class="card-body px-lg-5 pt-0">
+                <!--Card content-->
+                <div class="card-body px-lg-5 pt-0">
 
-                <!-- Form -->
-                <form class="text-center warning" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+                    <!-- Form -->
+                    <form class="text-center warning" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
 
-                    <div class="form-row">
-                        <div class="col-12">
-                            <div class="md-form">
-                                <select class=" p-2 col-6" name="orderState[]" required>
-                                    <option value="1">Done</option>
-                                    <option value="2">Processing</option>
-                                    <option value="3">Pending</option>
-                                    <option value="4">Cancelled</option>
-                                </select>
+                        <div class="form-row">
+                            <div class="col-12">
+                                <div class="md-form">
+                                    <select class=" p-2 col-6" name="orderState[0]" required>
+                                        <option value="1">Done</option>
+                                        <option value="2">Processing</option>
+                                        <option value="3">To Review</option>
+                                        <option value="4">Cancelled</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit" name="s" value="1">Submit</button>
+                        <input type="hidden" value="<?php echo $date; ?>" name="orderState[1]">
+                        <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit" name="s" value="1">Submit</button>
 
 
-                    <hr>
+                        <hr>
 
-                </form>
-                <!-- Form -->
+                    </form>
+                    <!-- Form -->
+
+                </div>
 
             </div>
-
+            <!-- Material form register -->
         </div>
-        <!-- Material form register -->
-    </div>
 
 <?php
+    } else {
+        $_SESSION['msg'] = warning("Order Transaction: " . $_GET['orderID'] . " cannot edit a finish or cancelled transaction");
+        header("location:viewOrders.php");
+    }
 } else {
     echo error("Order not Found, Sorry");
 }

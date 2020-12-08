@@ -21,3 +21,6 @@
 
 </html>
 <!-- #TODO  fix the error materialselect is not  a function -->
+<?php
+ob_end_flush();
+?>

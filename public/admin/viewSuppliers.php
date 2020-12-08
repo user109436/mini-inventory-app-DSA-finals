@@ -11,8 +11,11 @@ deleteItem('suppliers', 'supplierID', 'viewSuppliers.php');
     <table id="dtMaterialDesignExample" class="table tabble-striped" cellspacing="0" width="100%">
         <thead class="blue white-text">
             <tr>
-                <th class="th-sm">Manipulate
-                </th>
+                <?php
+                restrict(' <th class="th-sm">Manipulate
+                </th>');
+                ?>
+
                 <th class="th-sm">ID
                 </th>
                 <th class="th-sm">Name
@@ -26,10 +29,12 @@ deleteItem('suppliers', 'supplierID', 'viewSuppliers.php');
             <?php
             if ($result = getAllFetch("suppliers order by id desc")) {
                 while ($row = $result->fetch_assoc()) {
-
             ?>
                     <tr>
-                        <td><a href="editSupplier.php?supplierID=<?php echo $row['id'] ?>" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a><button onclick="del('viewSuppliers.php?supplierID=',this.value)" value="<?php echo $row['id'] ?>" class="deleteProduct btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></td>
+                        <?php
+                        restrict('<td><a href="editSupplier.php?supplierID=' .  $row['id'] . '" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a><button onclick="del(\'viewSuppliers.php?supplierID=\',this.value)" value="' . $row['id'] . '" class=" btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></td>
+                        ');
+                        ?>
                         <td><?php echo $row['id'] ?></td>
                         <td><?php echo $row['name'] ?></td>
 

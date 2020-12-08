@@ -1,17 +1,21 @@
 <?php
 include("./layouts/header.php");
-
-
-#TODO responsive category and supplier id overlaps in responsive view
-
-$_SESSION['id'];
+pageRestrict();
 if (isset($_POST['s']) && $_POST['s'] == 1) {
     $productInfo = sanitizeInput($_POST['products']); //sanitize values
+    $productInfo[7] = (int)$productInfo[7];
+    printArr($productInfo);
+
+    // die();
     if (noEmptyField($_POST['products'])) {
         if ($sql = isPrep("UPDATE products SET name=?, catID=?, supID=?, forsale=?, qtyOnHand=?, UPrice=?, percentMargin=? WHERE id=?")) {
-            $sql->bind_param("ssssssss", $productInfo[0], $productInfo[1], $productInfo[2], $productInfo[3], $productInfo[4], $productInfo[5], $productInfo[6], $_SESSION['id']);
+            $sql->bind_param("ssssssss", $productInfo[0], $productInfo[1], $productInfo[2], $productInfo[3], $productInfo[4], $productInfo[5], $productInfo[6], $productInfo[7]);
             if (isExecute($sql)) {
-                createEditProduct($_SESSION['id'], $productInfo, 1, " Succesfully Updated in Products and Sales", " Successfully Updated ");
+
+                createEditProduct($productInfo[7], $productInfo, 1, " Succesfully Updated in Products and Sales", " Successfully Updated ");
+                if ($sql = getById('products', $productInfo[7])) {
+                    logProduct($sql->fetch_all()[0], $_SESSION['accountID'], 2);
+                }
             }
         }
     }
@@ -19,7 +23,6 @@ if (isset($_POST['s']) && $_POST['s'] == 1) {
 
 if (isset($_GET['productID']) && validateParamID('productID')) {
     $id = $_GET['productID'];
-    $_SESSION['id'] = $id;
 
     $result = getById('products', $id);
     if ($result->num_rows > 0) {
@@ -41,14 +44,6 @@ if (isset($_GET['productID']) && validateParamID('productID')) {
         $sup = $supResult->fetch_assoc();
         $supplier = $sup['name'];
         $supplierID = $sup['id'];
-
-
-
-
-
-        // if (isset($_POST['s'])) {
-
-        // }
 ?>
 
         <div class="container mt-5">
@@ -169,14 +164,13 @@ if (isset($_GET['productID']) && validateParamID('productID')) {
                             </div>
 
 
-
+                            <input type="hidden" value="<?php echo $id ?>" name="products[7]">
                             <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit" name="s" value="1">Submit</button>
 
 
                             <hr>
 
                     </form>
-                    <!-- Form -->
 
                 </div>
 

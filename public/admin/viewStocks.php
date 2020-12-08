@@ -9,6 +9,7 @@ include("./layouts/header.php");
     <table id="dtMaterialDesignExample" class="table tabble-striped" cellspacing="0" width="100%">
         <thead class="blue white-text">
             <tr>
+                <th class="th-sm">Log By
                 </th>
                 <th class="th-sm">Product ID
                 </th>
@@ -16,18 +17,27 @@ include("./layouts/header.php");
                 </th>
                 <th class="th-sm">UPrice($)
                 </th>
+                <th class="th-sm">Date Log
+                </th>
             </tr>
         </thead>
         <tbody>
             <?php
-            if ($result = getAllFetch("newstocks order by id desc")) {
+            if ($result = getAllFetch("newstocks order by date desc")) {
                 while ($row = $result->fetch_assoc()) {
 
             ?>
                     <tr>
+                        <td><?php
+                            displayAccountType($row['accountID']);
+
+
+                            ?></td>
                         <td><?php echo $row['id'] ?></td>
                         <td><?php echo $row['qty'] ?></td>
                         <td><?php echo $row['UPrice'] ?></td>
+                        <td><?php echo $row['date'] ?></td>
+
                     </tr>
             <?php
                 }

@@ -9,3 +9,11 @@ console.log(index + ' update');
 }, 5000);
 
 # https://dzone.com/articles/whats-new-in-php-7-and-php-7-new-features
+
+if orders are cancelled return back all the qty in products
+
+# cancelled and done cannot be modify orders
+
+# cancel in orders.php button and edit, cannot edit if already cancelled/
+
+# if cancelled by user return all items to products and sales/

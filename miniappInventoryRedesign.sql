@@ -45,7 +45,8 @@ id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
     password varchar(255) NOT NULL,
     recoveryKey varchar(255) NOT NULL,
     questionKey varchar(255) NOT NULL,
-    accountType int(1) NOT NULL-- 1. user, 2. encoder, 3. senior stafff, 4. system admin
+    accountType int(1) NOT NULL,-- 1. user, 2. encoder, 3. senior stafff, 4. system admin
+    date TIMESTAMP
 );
 
 

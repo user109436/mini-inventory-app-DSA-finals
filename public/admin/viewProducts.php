@@ -8,7 +8,6 @@ if (validateParamID('productID')) {
     logProduct($sql->fetach_all()[0], $_SESSION['accountID'], 3);
   }
 }
-// deleteItem('products', 'productID', 'viewProducts.php');
 ?>
 <div class="table-responsive p-3">
 
@@ -18,8 +17,10 @@ if (validateParamID('productID')) {
   <table id="dtMaterialDesignExample" class="table tabble-striped" cellspacing="0" width="100%">
     <thead class="blue white-text">
       <tr>
-        <th class="th-sm">Edit
-        </th>
+        <?php
+        restrict('<th class="th-sm">Edit </th>');
+        ?>
+
         <th class="th-sm">ID
         </th>
         <th class="th-sm">Name
@@ -45,12 +46,32 @@ if (validateParamID('productID')) {
 
       ?>
           <tr>
-            <td><a href="editProduct.php?productID=<?php echo $row['id'] ?>" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a><button onclick="del('viewProducts.php?productID=',this.value)" value="<?php echo $row['id'] ?>" class="deleteProduct btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></td>
+            <?php
+            restrict('<td><a href="editProduct.php?productID=' . $row['id'] . '" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a></td>');
+            ?>
             <td><?php echo $row['id'] ?></td>
             <td><?php echo $row['name'] ?></td>
-            <td><?php echo $row['catID'] ?></td>
-            <td><?php echo $row['supID'] ?></td>
-            <td><?php echo $row['forsale'] ?></td>
+            <td><?php
+                if ($cat = getById('categories', $row['catID'])) {
+                  echo $cat->fetch_assoc()['name'];
+                } else {
+                  echo "<span class='red-text'>  <i class='fas fa-database'></i> Category ID: " . $row['catID'] . "  Deleted</span>";
+                }
+                ?></td>
+            <td><?php
+                if ($sup = getById('suppliers', $row['supID'])) {
+                  echo $sup->fetch_assoc()['name'];
+                } else {
+                  echo "<span class='red-text'>  <i class='fas fa-database'></i> Supplier ID: " . $row['catID'] . "  Deleted</span>";
+                }
+                ?></td>
+            <td><?php
+                if ($row['forsale']) {
+                  echo '<span class="green-text"><i class="fas fa-check-circle fa-lg"></i></span>';
+                } else {
+                  echo  '<span class="red-text"> <i class="fas fa-times-circle fa-lg"></i></i></span>';
+                }
+                ?></td>
             <td><?php echo $row['qtyOnHand'] ?></td>
             <td><?php echo $row['UPrice'] ?></td>
             <td><?php echo $row['percentMargin'] ?></td>

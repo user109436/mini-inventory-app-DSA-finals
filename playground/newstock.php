@@ -1,18 +1,44 @@
 <?php
 include("../private/config.php");
 
-$qtyOnHand = 1;
-$UPrice = 2.5;
-$listPrice = 4.5;
-$id = 2;
-$productInfo = array(10, 10, 98.95);
+$_SESSION['accountID'] = '7';
+$id = '12';
+$qty = '12';
+$listPrice = '12.5';
+// if ($test = isPrep("INSERT INTO test (id) VALUES(?)")) {
+//     $test->bind_param('s', $id);
+//     if (isExecute($test)) {
+//         echo "Inserted";
+//     }
+// }
+// if ($order = isPrep("INSERT INTO orders (id, userID, qty, listPrice, accountID, state)
+//                  VALUES (?,?,?,?,?,?)")) {
 
-$msg = null;
-$msg .= " Changes in Sales";
-$msg .= " Changes in Products";
-$msg .= " Changes in Orders";
+//     $order->bind_param("iiidii", $id, $_SESSION['accountID'], $qty, $listPrice, $_SESSION['accountID'], '2');
+//     if (isExecute($order)) {
+//         echo "order placed";
+//     }
+// }
 
-echo $msg;
+// $qtyOnHand = 1;
+// $UPrice = 2.5;
+// $listPrice = 4.5;
+// $id = 2;
+// $productInfo = array(10, 10, 98.95);
+
+// $msg = null;
+// $msg .= " Changes in Sales";
+// $msg .= " Changes in Products";
+// $msg .= " Changes in Orders";
+
+// echo $msg;
+
+
+echo "Password:" . $pwd = "1234";
+echo "Hashed: " . $pwdHash = password_hash($pwd, PASSWORD_DEFAULT);
+echo "Verify: " . password_verify($pwd, $pwdHash);
+// password_
+
 
 // $q = "UPDATE products, sales, orders SET products.qtyOnHand=?, products.UPrice=?
 //                     ,sales.listPrice=?, sales.qty=?, orders.listPrice=? WHERE sales.id=? and orders.id =? and products.id=?";

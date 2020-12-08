@@ -7,8 +7,6 @@ if (isset($_POST['s']) && $_POST['s'] == 1) {
     $supplier = sanitizeInput($_POST['supplier']);
     if (!empty($supplier[0])) {
 
-        echo $supplier[0];
-
         if ($sql = isPrep("INSERT INTO suppliers (name) VALUES(?)")) {
             $sql->bind_param("s", $supplier[0]);
             if (isExecute($sql)) {

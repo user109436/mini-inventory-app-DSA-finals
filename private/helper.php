@@ -43,7 +43,7 @@ function sanitizeInput($fields)
 {
     global $conn;
     foreach ($fields as $field) {
-        $field = htmlentities(htmlspecialchars($conn->real_escape_string($field)));
+        $field = strip_tags(htmlspecialchars($conn->real_escape_string($field)));
         $fieldInfo[] = filter_var($field, FILTER_SANITIZE_STRING);
     }
     return $fieldInfo;
@@ -52,6 +52,6 @@ function sanitizeInput($fields)
 function sanitizeSingle($sanitize)
 {
     global $conn;
-    $sanitize = htmlentities(htmlspecialchars($conn->real_escape_string($sanitize)));
+    $sanitize = strip_tags(htmlspecialchars($conn->real_escape_string($sanitize)));
     return $sanitize = filter_var($sanitize, FILTER_SANITIZE_STRING);
 }

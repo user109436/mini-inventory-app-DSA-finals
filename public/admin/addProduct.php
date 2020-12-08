@@ -1,19 +1,18 @@
 <?php
 include("./layouts/header.php");
 
-
-//check if categories and suppliers is existing
-//check if  forsale is yes or no 
-
-
 if (isset($_POST['s']) && $_POST['s'] == 1) {
     $productInfo = sanitizeInput($_POST['products']); //sanitize values
     if (noEmptyField($_POST['products'])) {
         if ($sql = isPrep("INSERT INTO products (name, catID, supID, forsale, qtyOnHand, UPrice, percentMargin)VALUES(?,?,?,?,?,?,?)")) {
             $sql->bind_param("sssssss", $productInfo[0], $productInfo[1], $productInfo[2], $productInfo[3], $productInfo[4], $productInfo[5], $productInfo[6]);
             if (isExecute($sql)) {
-                createEditProduct($conn->insert_id, $productInfo);
-                logProduct($productInfo, $_SESSION['id'], 1);
+                $productID = $conn->insert_id;
+                createEditProduct($productID, $productInfo);
+                if ($sql = getById('products', $productID, 0)) {
+                    $productInfo = $sql->fetch_all()[0];
+                    logProduct($productInfo, $_SESSION['accountID'], 1);
+                }
             }
         }
     }
@@ -27,7 +26,7 @@ if (isset($_POST['s']) && $_POST['s'] == 1) {
     <div class=" card">
 
         <h5 class="card-header info-color white-text text-center py-4">
-            <strong>Add Products</strong>
+            <strong>Add Product</strong>
         </h5>
 
         <!--Card content-->

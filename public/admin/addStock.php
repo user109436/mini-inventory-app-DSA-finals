@@ -1,19 +1,8 @@
 <?php
 include("./layouts/header.php");
 
-// $resultSales = isPrep("UPDATE sales, orders SET sales.listPrice=?, orders.listPrice=? WHERE sales.id=? AND orders.id=?");
-// $resultSales->bind_param("ssss", $a, $a, $id, $id);
-// $resultSales->execute();
-// echo "Update Sales and Orders Affected Rows:" . $resultSales->affected_rows;
-// // --products . UPrice + products . percentMargin + 12 % VAT
-
-// die();
-
 if (isset($_POST['s']) && $_POST['s'] == 1) {
-    printArr($_POST);
-
     if (noEmptyField($_POST['products'])) {
-
 
         if (noEmptyField($_POST['products'])) {
             $productInfo = sanitizeInput($_POST['products']);
@@ -87,7 +76,7 @@ if (isset($_POST['s']) && $_POST['s'] == 1) {
     <div class=" card">
 
         <h5 class="card-header info-color white-text text-center py-4">
-            <strong>Add Stocks</strong>
+            <strong>Add Stock</strong>
         </h5>
 
         <!--Card content-->
@@ -99,7 +88,7 @@ if (isset($_POST['s']) && $_POST['s'] == 1) {
                 <div class="form-row">
                     <div class="col-12">
                         <div class="md-form">
-                            <select class=" p-2 col-6" name="products[]" require="true">
+                            <select class=" p-2 col-6" name="products[0]" required>
                                 <?php
                                 if ($result = getAllFetch("products")) {
                                     if ($result->num_rows > 0) {
@@ -120,13 +109,13 @@ if (isset($_POST['s']) && $_POST['s'] == 1) {
                     <div class="col-12 d-flex  flex-column ">
                         <div class="col-12">
                             <div class="md-form">
-                                <input value="<?php echo isset($_POST['products'][1]) ? $_POST['products'][1] : "" ?>" require="true" type="number" class="form-control" name="products[1]">
+                                <input value="<?php echo isset($_POST['products'][1]) ? $_POST['products'][1] : "" ?>" required type="number" class="form-control" name="products[1]">
                                 <label for="qtyOnHand">Quantity</label>
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="md-form">
-                                <input value="<?php echo isset($_POST['products'][2]) ? $_POST['products'][2] : "" ?>" require="true" step="any" type="number" class="form-control" name="products[2]">
+                                <input value="<?php echo isset($_POST['products'][2]) ? $_POST['products'][2] : "" ?>" required step="any" type="number" class="form-control" name="products[2]">
                                 <label for="UPrice">UPrice($)</label>
                             </div>
                         </div>

@@ -1,7 +1,6 @@
 <?php
 include("./layouts/header.php");
-
-#TODO responsive category and supplier id overlaps in responsive view
+pageRestrict();
 if (isset($_POST['s']) && $_POST['s'] == 1) {
     $supplier = sanitizeInput($_POST['supplier']);
     if (!empty($supplier[0]) && !empty($supplier[1] += 0)) {
@@ -30,7 +29,7 @@ if (validateParamID('supplierID')) {
             <div class=" card">
 
                 <h5 class="card-header info-color white-text text-center py-4">
-                    <strong>Add Supplier</strong>
+                    <strong>Edit Supplier</strong>
                 </h5>
 
                 <!--Card content-->

@@ -1,10 +1,15 @@
 <?php
 include("../../private/config.php");
 session_start();
+ob_start();
+$_SESSION['id'] = null;
+// $_SESSION['accountID'] = 1;
+// $_SESSION['accountType'] = 4;
+if (isset($_SESSION['accountID']) and isset($_SESSION['accountType']) and $_SESSION['accountType']  < 2) {
+  header("location:../index.php");
+}
 
-$_SESSION['accountType'] = 4;
-$_SESSION['accountID'] = 4;
-
+printArr($_SESSION);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,6 +44,7 @@ $_SESSION['accountID'] = 4;
   </script>
 </head>
 <?php
-include("navbar.php");
+include("navbar2.php");
 include("./tools/message.php");
+
 ?>

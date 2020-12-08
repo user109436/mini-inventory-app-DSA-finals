@@ -10,8 +10,12 @@ deleteItem('categories', 'categoryID', 'viewCategories.php');
     <table id="dtMaterialDesignExample" class="table tabble-striped" cellspacing="0" width="100%">
         <thead class="blue white-text">
             <tr>
-                <th class="th-sm">Manipulate
-                </th>
+                <?php
+                restrict('<th class="th-sm">Manipulate
+                </th>');
+                ?>
+
+
                 <th class="th-sm">ID
                 </th>
                 <th class="th-sm">Name
@@ -28,10 +32,12 @@ deleteItem('categories', 'categoryID', 'viewCategories.php');
 
             ?>
                     <tr>
-                        <td><a href="editCategory.php?categoryID=<?php echo $row['id'] ?>" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a><button onclick="del('viewCategories.php?categoryID=',this.value)" value="<?php echo $row['id'] ?>" class="deleteProduct btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></td>
+                        <?php
+                        restrict('<td><a href="editCategory.php?categoryID=' . $row['id'] . '" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a><button onclick="del(\'viewCategories.php?categoryID=\',this.value)" value="' . $row['id'] . '" class="deleteProduct btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></td>
+                        ');
+                        ?>
                         <td><?php echo $row['id'] ?></td>
                         <td><?php echo $row['name'] ?></td>
-
                         <?php if ($categories = openQuery("select * from products  where catID=" . $row['id'])) {
                             echo "<td> $categories->num_rows</td>";
                         }

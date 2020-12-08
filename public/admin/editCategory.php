@@ -1,8 +1,7 @@
 <?php
 include("./layouts/header.php");
 //category and suppliers can still be optimized but not top priority right now
-
-#TODO responsive category and supplier id overlaps in responsive view
+pageRestrict();
 if (isset($_POST['s']) && $_POST['s'] == 1) {
     $category = sanitizeInput($_POST['category']);
     if (!empty($category[0]) && !empty($category[1] += 0)) {
@@ -31,7 +30,7 @@ if (validateParamID('categoryID')) {
             <div class=" card">
 
                 <h5 class="card-header info-color white-text text-center py-4">
-                    <strong>Add category</strong>
+                    <strong>Edit Category</strong>
                 </h5>
 
                 <!--Card content-->

@@ -27,7 +27,7 @@ if (isset($_POST['s']) && $_POST['s'] == 1) {
     <div class=" card">
 
         <h5 class="card-header info-color white-text text-center py-4">
-            <strong>Add category</strong>
+            <strong>Add Category</strong>
         </h5>
 
         <!--Card content-->

@@ -30,7 +30,9 @@ include("./layouts/header.php");
             ?>
                     <tr>
                         <td><?php
-                            echo getById('products', $row['id'])->fetch_assoc()['name'];
+                            if ($prod = getById('products', $row['id'], 1, "Product Deleted")) {
+                                echo $prod->fetch_assoc()['name'];
+                            }
                             ?></td>
                         <td><?php echo $row['id'] ?></td>
 

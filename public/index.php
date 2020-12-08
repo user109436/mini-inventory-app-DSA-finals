@@ -1,56 +1,176 @@
-<?php 
-include("layouts/header.php")
+<?php
+include("./layouts/header.php");
+
+if (isset($_POST['s']) && $_POST['s'] == 1) {
+  $username = $conn->real_escape_string($_POST['username']);
+  $username = htmlentities($username);
+  $pwd = $conn->real_escape_string($_POST['password']);
+  $pwd = htmlentities($pwd);
+
+
+
+  if (!empty($username) && !empty($pwd)) {
+    if ($sql = $conn->prepare("SELECT * FROM accounts")) {
+      if ($sql->execute()) {
+        //see if there's an existing account;
+        $result = $sql->get_result();
+        if ($result->num_rows > 0) {
+          while ($row = $result->fetch_assoc()) {
+            if ($row['username'] == $username && password_verify($pwd, $row['password'])) {
+              //make the user log in 
+              if ($row['accountType'] > 1) {
+                //admin page
+                header("location:admin/index.php");
+              } else {
+                //client_side
+                header("location:home.php");
+              }
+              $_SESSION['accountID'] = $row['id'];
+              $_SESSION['accountType'] = $row['accountType'];
+
+              //redirect
+            } else {
+              //Wrong Password Credential
+              $_SESSION['x'] = warning("Wrong Credentials");
+            }
+          }
+        } else {
+          //Account doesn't exist
+          echo error("Account Doesn't Exist");
+        }
+      } else {
+        //error
+        echo error("There's Something Wrong Processing the Query");
+      }
+    } else {
+      echo error("Error in Query");
+    }
+  } else {
+    echo error("Please Fill Up the Required Fields");
+  }
+}
+
 ?>
 
-
 <body>
-  <!-- Start your project here-->
-
-<!--Navbar-->
-<nav class="navbar navbar-expand-lg navbar-dark primary-color">
-
-  <!-- Navbar brand -->
-  <a class="navbar-brand" href="./">ABC</a>
-
-  <!-- Collapse button -->
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
-    aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <!-- Collapsible content -->
-  <div class="collapse navbar-collapse" id="basicExampleNav">
-
-    <!-- Links -->
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Home
-          <span class="sr-only">(current)</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Features</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Pricing</a>
-      </li>
 
 
-    </ul>
-    <!-- Links -->
+  <?php
+
+  include("./layouts/navbar.php");
+  ?>
+  <!-- Full Page Intro -->
+  <div class="view full-page-intro" style="height:100vh; background-image: url( node_modules/mdbootstrap/img/inventory.svg); background-repeat: no-repeat; background-size: cover;">
+
+    <!-- Mask & flexbox options-->
+    <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+      <!-- Content -->
+      <div class="container">
+
+        <!--Grid row-->
+        <div class="row ">
+
+          <!--Grid column-->
+          <div class="col-md-6 mb-4 white-text text-center text-md-left animated bounceInUp slow">
+
+            <h1 class="display-4 font-weight-bold">INVETOTRACK</h1>
+
+            <hr class="hr-light">
+
+            <p>
+              <strong>We Keep Things Tracked</strong>
+            </p>
+
+            <p class="mb-4 d-none d-md-block">
+              <strong>Taste the world's most delicious italian food ever serve, with over 50 branches worldwide and 67 years expertise in cooking</strong>
+            </p>
+
+            <a href="register.php" class="btn btn-success btn-lg animated pulse infinite">Sign up
+              <i class="fas fa-sign-in-alt ml-2"></i>
+            </a>
+
+          </div>
+          <!--Grid column-->
+
+          <!--Grid column-->
+          <div class="col-md-6 col-xl-5 mb-4 ">
+
+            <!--Card-->
+            <div class="card">
+              <?php
+              if (isset($_SESSION['x'])) {
+                echo $_SESSION['x'];
+                unset($_SESSION['x']);
+              }
+              ?>
+
+              <!--Card content-->
+              <div class="card-body">
+
+                <!-- Form -->
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+                  <!-- Heading -->
+                  <h3 class="dark-grey-text text-center">
+                    <strong>Log in</strong>
+                  </h3>
+                  <hr>
+
+                  <div class="md-form">
+                    <i class="fas fa-user prefix grey-text"></i>
+                    <input type="text" value="<?php echo $_POST['username'] ?? ''; ?>" id="username" class="form-control" name="username">
+                    <label for="username">Username</label>
+                  </div>
+                  <div class="md-form">
+                    <i class="fas fa-key prefix grey-text"></i>
+                    <input type="password" id="password" class="form-control" name="password">
+                    <label for="password">Password </label>
+                    <p class="ml-3 p-2">
+                      <input type="checkbox" onclick="showPwd()">
+                      Show password
+                    </p>
+
+                  </div>
+
+
+                  <div class="text-center">
+                    <button class="btn btn-success" name="s" value="1">Login</button>
+                  </div>
+
+                </form>
+                <!-- Form -->
+
+              </div>
+
+            </div>
+            <!--/.Card-->
+
+          </div>
+          <!--Grid column-->
+
+        </div>
+        <!--Grid row-->
+
+      </div>
+      <!-- Content -->
+
+    </div>
+    <!-- Mask & flexbox options-->
+
   </div>
-  <!-- Collapsible content -->
-
-</nav>
-<!--/.Navbar-->
-
-
-<div class="container">
-    <h1>Welcome Customers</h1>
-</div>
-
-  <!-- /Start your project here-->
-
+  <!-- Full Page Intro -->
 </body>
+<script>
+  function showPwd() {
+    var x = document.getElementById("password");
+    if (x.type === "password") {
+      x.type = "text";
+    } else {
+      x.type = "password";
+    }
+  }
+</script>
+<?php
 
-<?php include("layouts/footer.php")?>
+include("./layouts/footer.php");
+?>

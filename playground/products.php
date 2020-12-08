@@ -1,17 +1,19 @@
 <?php
 include("../private/config.php");
 
-$id = 1;
-if ($sql = $conn->prepare("SELECT * from products INNER JOIN sales ON products.id = sales.id INNER JOIN orders ON products.id=orders.id WHERE products.id =?")) {
-    $sql->bind_param("s", $id);
-    printArr($sql);
-    // printArr($sql->fetch_assoc());
 
-    if (isExecute($sql)) {
-        $result = $sql->get_result();
-        printArr($result->fetch_assoc());
-    }
-}
+
+// $id = 1;
+// if ($sql = $conn->prepare("SELECT * from products INNER JOIN sales ON products.id = sales.id INNER JOIN orders ON products.id=orders.id WHERE products.id =?")) {
+//     $sql->bind_param("s", $id);
+//     printArr($sql);
+//     // printArr($sql->fetch_assoc());
+
+//     if (isExecute($sql)) {
+//         $result = $sql->get_result();
+//         printArr($result->fetch_assoc());
+//     }
+// }
 
 
 

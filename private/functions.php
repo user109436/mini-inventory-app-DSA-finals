@@ -23,26 +23,68 @@ function supplierExist($suppliers, $supplier)
 function activity($activity)
 {
     if ($activity == 1) {
-        return 'create';
+        return '    <span class="badge badge-pill badge-success"><i class="fas fa-plus-circle"></i>Create<span>';
     } else if ($activity == 2) {
-        return 'edit';
+        return '<span class="badge badge-pill badge-warning" ><i class="fas fa-edit"></i>Edit</span>';
     } else if ($activity == 3) {
-        return 'delete';
+        return '    <span class="badge badge-pill badge-danger"><i class="fas fa-trash-alt"></i>Delete</span>';
     }
     return false;
 }
 function accountType($accountType)
 {
     if ($accountType == 1) {
-        return 'user';
+        return '<span class="badge badge-pill badge-default">User</span>';
     } else if ($accountType == 2) {
-        return 'Encoder';
+        return '<span class="badge badge-pill badge-warning">Encoder</span>';
     } else if ($accountType == 3) {
-        return 'seniof staff';
+        return '<span class="badge badge-pill badge-secondary">Senior Staff</span>';
     } else if ($accountType == 4) {
-        return 'system admin';
+        return '<span class="badge badge-pill badge-success">System Admin</span>';
     }
     return false;
+}
+function restrict($el)
+{
+    if (isset($_SESSION['accountID']) and isset($_SESSION['accountType']) and $_SESSION['accountType'] >= 3 and $_SESSION['accountType'] <= 4) {
+        echo $el;
+        return true;
+    }
+    return false;
+}
+function pageRestrict($loc = "./")
+{
+    if (isset($_SESSION['accountID']) and isset($_SESSION['accountType']) and $_SESSION['accountType'] < 3) {
+        $_SESSION['msg'] = warning("You do not have Authorization to view some page please contact your System Admin");
+        header("location:" . $loc);
+    }
+}
+function allowSystemAdmin($el)
+{
+
+    if (isset($_SESSION['accountID'])  and isset($_SESSION['accountType']) and $_SESSION['accountType'] == 4) {
+        echo $el;
+        return true;
+    }
+    return false;
+}
+
+
+
+
+function displayAccountType($id)
+{
+    if ($log = getById('accounts', $id, 0)) {
+        $account = $log->fetch_assoc();
+        echo $account['username'] . " " . accountType($account['accountType']);
+    } else {
+        echo "<span class='red-text'>  <i class='fas fa-database'></i> Account ID: " . $id . " Deleted</span>";
+    }
+}
+function get_starred($str)
+{
+    $str_length = strlen($str);
+    return substr($str, 0, 0) . str_repeat('*', $str_length);
 }
 
 function orderState($state = 3)
@@ -53,12 +95,56 @@ function orderState($state = 3)
     } else if ($state == 2) {
         return '<td><span class="badge badge-info"><i class="fas fa-spinner"></i> Processing</span></td>';
     } else if ($state == 3) {
-        return '<td><span class="badge badge-warning"><i class="fas fa-ban"></i> Pending</span></td>';
+        return '<td><span class="badge badge-warning"><i class="fas fa-ban"></i> To Review</span></td>';
     } else if ($state == 4) {
         return '<td><span class="badge badge-danger"><i class="far fa-times-circle"></i> Cancelled</span></td>';
     }
     return false;
 }
+
+function returnQtySaleProd($dateOrder)
+{
+    global $conn;
+    if ($sql = isPrep("SELECT * FROM orders WHERE date=?")) {
+        $sql->bind_param("s", $dateOrder);
+        if (isExecute($sql)) {
+            $order = $sql->get_result();
+            $orderData = $order->fetch_assoc();
+            $msg = "";
+            //check if id exist in products
+            if ($prod = getById('products', $orderData['id'])) {
+                $productQty = $prod->fetch_assoc()['qtyOnHand'];
+                $updatedQty = $productQty + $orderData['qty'];
+
+                //return qty to products 
+                if ($prodUpdate = isPrep("UPDATE products SET qtyOnHand=? WHERE id=?")) {
+                    $prodUpdate->bind_param("ss", $updatedQty, $orderData['id']);
+                    if (isExecute($prodUpdate)) {
+                        $msg .= " " . $prodUpdate->affected_rows . "  Change in Products";
+                    }
+                }
+            }
+            //check if id exist in sales
+            if ($saleData = getById('sales', $orderData['id'])) {
+                $saleQty = $saleData->fetch_assoc()['qty'];
+                $updatedQty = $saleQty + $orderData['qty'];
+
+                //return qty to products 
+                if ($saleUpdate = isPrep("UPDATE sales SET qty=? WHERE id=?")) {
+                    $saleUpdate->bind_param("ss", $updatedQty, $orderData['id']);
+                    if (isExecute($saleUpdate)) {
+                        $msg .= " " . $saleUpdate->affected_rows . "  Change in Sales";
+                    }
+                }
+            }
+            if ($msg != "") {
+                return $msg;
+            }
+        }
+    }
+    return false;
+}
+
 
 //LOGS
 
