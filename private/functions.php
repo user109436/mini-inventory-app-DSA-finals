@@ -183,6 +183,7 @@ function createEditProduct($id, $productInfo, $edit = 0, $msgSales = " Successfu
         }
         //for sale
         if ($productInfo[3]) { //update if there's existing id else insert in sales if for sale =1
+            delete('sales', $id);
             //insert to sales
             if ($sql = isPrep("INSERT INTO sales (qty, listPrice,id) VALUES(?,?,?)")) {
                 $sql->bind_param("sss", $salesQty, $salesListPrice, $id);

@@ -34,7 +34,7 @@ include("./layouts/header.php");
 
                             ?></td>
                         <td><?php echo $row['id'] ?></td>
-                        <td><?php echo $row['qty'] ?></td>
+                        <td><?phpecho $row['qty'] ?></td>
                         <td><?php echo $row['UPrice'] ?></td>
                         <td><?php echo $row['date'] ?></td>
 

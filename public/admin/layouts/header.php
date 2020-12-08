@@ -3,11 +3,9 @@ include("../../private/config.php");
 session_start();
 ob_start();
 $_SESSION['id'] = null;
-if (isset($_SESSION['accountID']) and isset($_SESSION['accountType']) and $_SESSION['accountType']  <= 1) {
+if (!isset($_SESSION['accountID']) and !isset($_SESSION['accountType']) or $_SESSION['accountType']  <= 1) {
   header("location:../");
 }
-
-printArr($_SESSION);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,7 +40,7 @@ printArr($_SESSION);
   </script>
 </head>
 <?php
-include("navbar2.php");
+include("navbar.php");
 include("./tools/message.php");
 
 ?>

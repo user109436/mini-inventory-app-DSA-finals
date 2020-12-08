@@ -4,9 +4,6 @@ pageRestrict();
 if (isset($_POST['s']) && $_POST['s'] == 1) {
     $productInfo = sanitizeInput($_POST['products']); //sanitize values
     $productInfo[7] = (int)$productInfo[7];
-    printArr($productInfo);
-
-    // die();
     if (noEmptyField($_POST['products'])) {
         if ($sql = isPrep("UPDATE products SET name=?, catID=?, supID=?, forsale=?, qtyOnHand=?, UPrice=?, percentMargin=? WHERE id=?")) {
             $sql->bind_param("ssssssss", $productInfo[0], $productInfo[1], $productInfo[2], $productInfo[3], $productInfo[4], $productInfo[5], $productInfo[6], $productInfo[7]);

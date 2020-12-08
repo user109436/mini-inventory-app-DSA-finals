@@ -5,12 +5,13 @@ pageRestrict();
 if (isset($_POST['s']) && $_POST['s'] == 1) {
     $accountInfo = sanitizeInput($_POST['accounts']); //sanitize values
     $accountInfo[4] = (int)$accountInfo[4];
+
     if (noEmptyField($_POST['accounts'])) {
 
         if (isset($_SESSION['accountType']) and $_SESSION['accountType'] == 4) { //for system admin only
             $accountInfo[1] = password_hash($accountInfo[1], PASSWORD_DEFAULT);
             if ($sql = isPrep("UPDATE accounts SET username=?, password=?, recoveryKey=?, questionKey=?, accountType=? WHERE id=?")) {
-                $sql->bind_param("ssssss", $accountInfo[0], $accountInfo[1], $accountInfo[2], $accountInfo[3], $accountInfo[4], $accountInfo[4]);
+                $sql->bind_param("ssssss", $accountInfo[0], $accountInfo[1], $accountInfo[2], $accountInfo[3], $accountInfo[4], $accountInfo[5]);
             }
         } else {
             if ($sql = isPrep("UPDATE accounts SET username=?, recoveryKey=?, questionKey=?, accountType=? WHERE id=?")) {
@@ -93,7 +94,7 @@ if (isset($_GET['accountID']) && validateParamID('accountID')) {
 
 
 
-                            <input type="hidden" value="<?php echo $id ?>" name="accounts[4]">
+                            <input type="hidden" value="<?php echo $id ?>" name="accounts[5]">
                             <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit" name="s" value="1">Submit</button>
 
 

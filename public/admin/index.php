@@ -7,6 +7,5 @@ if (validateParamID('logout')) {
 ?>
 <h1>Admin Page</h1>
 <?php
-// include("./layouts/modal.php");
 include("./layouts/footer.php");
 ?>

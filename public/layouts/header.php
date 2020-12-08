@@ -1,7 +1,6 @@
 <?php
 include_once("./../private/config.php");
 session_start();
-printArr($_SESSION);
 ob_start();
 ?>
 

@@ -23,6 +23,10 @@ if (isset($_POST['s']) && $_POST['s'] == 1) {
           while ($row = $result->fetch_assoc()) {
             if ($row['username'] == $username && password_verify($pwd, $row['password'])) {
               //make the user log in 
+
+              $_SESSION['accountID'] = $row['id'];
+              $_SESSION['accountType'] = $row['accountType'];
+              $_SESSION['username'] = $row['username'];
               if ($row['accountType'] > 1) {
                 //admin page
                 header("location:admin/index.php");
@@ -30,8 +34,7 @@ if (isset($_POST['s']) && $_POST['s'] == 1) {
                 //client_side
                 header("location:home.php");
               }
-              $_SESSION['accountID'] = $row['id'];
-              $_SESSION['accountType'] = $row['accountType'];
+
 
               //redirect
             } else {

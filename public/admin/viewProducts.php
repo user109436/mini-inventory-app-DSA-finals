@@ -72,7 +72,16 @@ if (validateParamID('productID')) {
                   echo  '<span class="red-text"> <i class="fas fa-times-circle fa-lg"></i></i></span>';
                 }
                 ?></td>
-            <td><?php echo $row['qtyOnHand'] ?></td>
+            <td><?php
+
+                if ($row['qtyOnHand'] == 0) {
+                  echo "<p class='red-text font-weight-bold'>Out of Stock</p>";
+                } else {
+                  echo $row['qtyOnHand'];
+                }
+
+
+                ?></td>
             <td><?php echo $row['UPrice'] ?></td>
             <td><?php echo $row['percentMargin'] ?></td>
           </tr>
