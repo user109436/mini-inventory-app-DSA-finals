@@ -94,7 +94,7 @@ if (isset($_POST['s']) && $_POST['s'] == 1) {
                                     if ($result->num_rows > 0) {
                                         echo '<option value="" disabled selected>Choose Products</option>';
                                         while ($row = $result->fetch_assoc()) {
-                                            echo "<option value=" . $row['id'] . ">" . $row['name'] . "</option>";
+                                            echo "<option value=" . $row['id'] . ">" . $row['name'] . " ID: " . $row['id'] . "</option>";
                                         }
                                     } else {
                                         echo '<option value="" disabled selected>Please Add First a Product</option>';

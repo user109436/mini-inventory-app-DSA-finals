@@ -10,9 +10,11 @@ if (validateParamID('productID')) {
 }
 ?>
 <div class="table-responsive p-3">
+  <div class="container actions">
+    <a href="addProduct.php" class="btn btn-success btn-sm"><i class="fas fa-plus-circle fa-lg"></i> Product </a>
+    <a href="addStock.php" class="btn btn-success btn-sm"><i class="fas fa-plus-circle fa-lg"></i> Stock</a>
+  </div>
 
-  <a href="addProduct.php" class="btn btn-success btn-sm"><i class="fas fa-plus-circle fa-lg"></i> Product </a>
-  <a href="addStock.php" class="btn btn-success btn-sm"><i class="fas fa-plus-circle fa-lg"></i> Stock</a>
 
   <table id="dtMaterialDesignExample" class="table tabble-striped" cellspacing="0" width="100%">
     <thead class="blue white-text">
@@ -96,3 +98,20 @@ if (validateParamID('productID')) {
 <?php
 include("./layouts/footer.php");
 ?>
+
+<script type="text/javascript">
+  // $(document).ready(function() {
+  //   console.log("Start");
+  //   var table = $('#dtMaterialDesignExample').DataTable({
+  //     dom: 'Bfrtip',
+  //     buttons: [
+  //       'copy', 'csv', 'excel', 'pdf', 'print'
+  //     ]
+  //   });
+  //   $('.dt-button').addClass("btn btn-elegant waves-effect btn-sm"); // add styling
+  //   const btnContainer = document.querySelectorAll('.dt-button'); //copy parent
+  //   $('.dt-buttons').detach(); //remove  parent
+  //   $('.actions').append(btnContainer);
+  //   console.log("Success");
+  // });
+</script>

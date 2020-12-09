@@ -5,6 +5,7 @@ include("./layouts/header.php");
 pageRestrict();
 ?>
 <div class="table-responsive p-3">
+    <div class="container actions"></div>
     <table id="dtMaterialDesignExample" class="table tabble-striped" cellspacing="0" width="100%">
         <thead class="blue white-text">
             <tr>

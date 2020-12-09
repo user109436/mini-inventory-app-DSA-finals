@@ -2,7 +2,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark primary-color">
 
     <!-- Navbar brand -->
-    <a class="navbar-brand" href="./">ABC &#169;</a>
+    <a class="navbar-brand" href="./">INVETOTRACK &#169;</a>
 
     <!-- Collapse button -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#abcNav" aria-controls="abcNav" aria-expanded="false" aria-label="Toggle navigation">

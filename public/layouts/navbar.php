@@ -5,7 +5,7 @@
     <div class="container">
 
         <!-- Brand -->
-        <a class="navbar-brand" href="../home.php">
+        <a class="navbar-brand" href="./home.php">
             <strong>INVETOTRACK</strong>
         </a>
 

@@ -7,7 +7,9 @@ deleteItem('suppliers', 'supplierID', 'viewSuppliers.php');
 ?>
 <div class="table-responsive p-3">
 
-    <a href="addSupplier.php" class="btn btn-success btn-sm"><i class="fas fa-plus-circle fa-lg"></i> Supplier</a>
+    <div class="container actions">
+        <a href="addSupplier.php" class="btn btn-success btn-sm"><i class="fas fa-plus-circle fa-lg"></i> Supplier</a>
+    </div>
     <table id="dtMaterialDesignExample" class="table tabble-striped" cellspacing="0" width="100%">
         <thead class="blue white-text">
             <tr>

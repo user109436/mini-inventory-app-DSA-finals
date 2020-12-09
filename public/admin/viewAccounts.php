@@ -5,7 +5,9 @@ include("./layouts/header.php");
 deleteItem('accounts', 'accountID', 'viewAccounts.php')
 ?>
 <div class="table-responsive p-3">
-    <a href="addAccount.php" class="btn btn-success btn-sm"><i class="fas fa-plus-circle fa-lg"></i> Account </a>
+    <div class="container actions">
+        <a href="addAccount.php" class="btn btn-success btn-sm"><i class="fas fa-plus-circle fa-lg"></i> Account </a>
+    </div>
     <table id="dtMaterialDesignExample" class="table tabble-striped" cellspacing="0" width="100%">
         <thead class="blue white-text">
             <tr>
@@ -13,7 +15,6 @@ deleteItem('accounts', 'accountID', 'viewAccounts.php')
                 restrict(' <th class="th-sm">Edit
                 </th>');
                 ?>
-
                 <th class="th-sm">ID
                 </th>
                 <th class="th-sm">Username

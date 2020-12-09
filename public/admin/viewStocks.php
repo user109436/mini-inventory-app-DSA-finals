@@ -4,8 +4,10 @@
 include("./layouts/header.php");
 ?>
 <div class="table-responsive p-3">
+    <div class="container actions">
+        <a href="addStock.php" class="btn btn-success btn-sm"><i class="fas fa-plus-circle fa-lg"></i> Stock</a>
+    </div>
 
-    <a href="addStock.php" class="btn btn-success btn-sm"><i class="fas fa-plus-circle fa-lg"></i> Stock</a>
     <table id="dtMaterialDesignExample" class="table tabble-striped" cellspacing="0" width="100%">
         <thead class="blue white-text">
             <tr>
