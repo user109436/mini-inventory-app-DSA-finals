@@ -1,10 +1,13 @@
 <?php
 include("../private/config.php");
+$pwd = "admin";
+echo $pwdhashed = "$2y$10$/ycpl98coQ.qwfw1xDJgEO.Zwdno/.0yUhKwkAEg2nsBmejHLJhQS";
+echo password_verify($pwd, $pwdhashed);
 
-$_SESSION['accountID'] = '7';
-$id = '12';
-$qty = '12';
-$listPrice = '12.5';
+// $_SESSION['accountID'] = '7';
+// $id = '12';
+// $qty = '12';
+// $listPrice = '12.5';
 // if ($test = isPrep("INSERT INTO test (id) VALUES(?)")) {
 //     $test->bind_param('s', $id);
 //     if (isExecute($test)) {

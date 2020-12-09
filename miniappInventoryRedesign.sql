@@ -1,7 +1,4 @@
--- NOTE add the 12%VAT in the list-price Unit Price is in Dollars
-
-
-CREATE DATABASE IF NOT EXISTS miniAppInventory;
+CREATE DATABASE IF NOT EXISTS test;
 CREATE TABLE IF NOT EXISTS suppliers(
 id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 name VARCHAR(255) NOT NULL,
@@ -12,8 +9,6 @@ id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 name VARCHAR(255) NOT NULL,
 date TIMESTAMP 
 );
-
-
 CREATE TABLE IF NOT EXISTS products(
 id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 name VARCHAR(255) NOT NULL, 
@@ -26,17 +21,17 @@ percentMargin DOUBLE(11, 2) NOT NULL
 );
 CREATE TABLE IF NOT EXISTS sales (
 id INT(11) NOT NULL,
-qty INT(11) NOT NULL, -- products.qtyOnHand + newstocks.qty
-listPrice DOUBLE(11, 2) NOT NULL, -- products.UPrice + products.percentMargin + 12%VAT
+qty INT(11) NOT NULL,
+listPrice DOUBLE(11, 2) NOT NULL, 
 date TIMESTAMP
 );
 CREATE TABLE IF NOT EXISTS orders (
 id INT(11) NOT NULL,
 userID INT(11) NOT NULL,
 qty INT(11) NOT NULL,
-listPrice DOUBLE(11, 2) NOT NULL, -- products.UPrice + products.percentMargin + 12%VAT
+listPrice DOUBLE(11, 2) NOT NULL, 
 accountID INT(11) NOT NULL,
-state INT(1) NOT NULL,-- 1. done, 2. processing, 3. pending, 4. cancelled
+state INT(1) NOT NULL,
 date TIMESTAMP 
 ); 
 CREATE TABLE IF NOT EXISTS accounts(
@@ -45,12 +40,10 @@ id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
     password varchar(255) NOT NULL,
     recoveryKey varchar(255) NOT NULL,
     questionKey varchar(255) NOT NULL,
-    accountType int(1) NOT NULL,-- 1. user, 2. encoder, 3. senior stafff, 4. system admin
+    accountType int(1) NOT NULL,
     date TIMESTAMP
 );
 
-
----LOGS____________________________
 
 CREATE TABLE IF NOT EXISTS productslogs(
 id INT(11) NOT NULL,
@@ -73,9 +66,6 @@ accountID INT(11) NOT NULL,
 date TIMESTAMP 
 );
 
-
--- Insert Data____________________
-
 INSERT INTO suppliers (name) 
 VALUES ("ABC"), ("XYZ"),("PQR");
 
@@ -94,20 +84,14 @@ VALUES
     ("Hale",1,2,1, 30,95,9);
 
 
-
-
-
--- Need to insert the list price + 12%VAT inlcuded
 INSERT INTO orders (id,userID, qty, listPrice,accountID, state)
 VALUES (1, 1, 10, 110.109, 1, 4),(2, 2, 15,110.109, 1, 1), (3, 3,20,110.109, 1, 2);
 INSERT INTO newstocks(id, qty, UPrice, accountID)
 VALUES  (1,10, 98.95,1), (2,20,98.75,1), (3,15,101.50,1), (4,20,150.10,1);
 
 INSERT INTO accounts(username, password, recoveryKey, questionKey, accountType)
-VALUES("zedek", "1234","cycling","What do you want to do?",  4  );
--- logs
-
-INSERT INTO productslogs ( productID,name, catID, supID, forsale, qtyOnHand, UPrice, percentMargin, accountID, activity)
+VALUES("zedek", "$2y$10$/ycpl98coQ.qwfw1xDJgEO.Zwdno/.0yUhKwkAEg2nsBmejHLJhQS","cycling","What do you want to do?",  4  );
+INSERT INTO productslogs ( id,name, catID, supID, forsale, qtyOnHand, UPrice, percentMargin, accountID, activity)
 VALUES 
     (1,"Nokia",1,1,1, 120,99.99,10, 1, 1),
     ( 2,"O+",1,1,1, 100,98.75,10, 1, 1),
@@ -120,9 +104,3 @@ VALUES
 VALUES (1, 10, 110.109),
         (2, 15,110.109),
         (3,20,110.109);
-
-
-
-
-
-        

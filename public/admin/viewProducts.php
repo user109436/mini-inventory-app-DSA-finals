@@ -98,20 +98,3 @@ if (validateParamID('productID')) {
 <?php
 include("./layouts/footer.php");
 ?>
-
-<script type="text/javascript">
-  // $(document).ready(function() {
-  //   console.log("Start");
-  //   var table = $('#dtMaterialDesignExample').DataTable({
-  //     dom: 'Bfrtip',
-  //     buttons: [
-  //       'copy', 'csv', 'excel', 'pdf', 'print'
-  //     ]
-  //   });
-  //   $('.dt-button').addClass("btn btn-elegant waves-effect btn-sm"); // add styling
-  //   const btnContainer = document.querySelectorAll('.dt-button'); //copy parent
-  //   $('.dt-buttons').detach(); //remove  parent
-  //   $('.actions').append(btnContainer);
-  //   console.log("Success");
-  // });
-</script>

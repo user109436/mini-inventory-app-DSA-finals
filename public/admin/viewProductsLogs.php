@@ -1,6 +1,4 @@
 <?php
-#TODO search label need to be fixed
-#TODO icons
 include("./layouts/header.php");
 pageRestrict();
 ?>
